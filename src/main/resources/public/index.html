@@ -2,14 +2,31 @@
 <html lang="es">
 <body>
 <h2>HTML Forms</h2>
-<form action="/results">
+<form action="/facadealpha">
     First name:<br>
-    <input type="text" name="firstname" value="Mickey">
+    <input type="text" name="time" value="INTRADAY">
     <br> Last name:
     <br>
-    <input type="text" name="lastname" value="Mouse">
+    <input type="text" name="stock" value="fb">
     <br>
     <br>
     <input type="submit" value="Submit"></form>
-<p>If you click the "Submit" button, the form-data will be sent to a page called "/results".</p></body>
+<p>If you click the "Submit" button, the form-data will be sent to a page called "/facadealpha".
+time: INTRADAY, DAILY, WEEKLY, MONTHLY
+    Stock: fb
+</p>
+<form action="/iexapis">
+    First name:<br>
+    <input type="text" name="time" value="INTRADAY">
+    <br> Last name:
+    <br>
+    <input type="text" name="stock" value="fb">
+    <br>
+    <br>
+    <input type="submit" value="Submit"></form>
+<p>If you click the "Submit" button, the form-data will be sent to a page called "/iexapis".
+    time: INTRADAY, DAILY, WEEKLY, MONTHLY
+    Stock: aapl,fb
+</p>
+</body>
 </html>
