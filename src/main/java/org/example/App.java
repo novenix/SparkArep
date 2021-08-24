@@ -17,7 +17,7 @@ import static spark.Spark.*;
  * @author daniel
  */
 public class App {
-
+    private  static Cache cache = new Cache();
     /**
      * This main method uses SparkWeb static methods and lambda functions to
      * create a simple Hello World web app. It maps the lambda function to the
@@ -35,21 +35,31 @@ public class App {
 
     private static String facadeAlpha(Request req, Response res) {
         String response ="None";
+
+        //String responseCache= String.valueOf(cache.getSocks(getURL(time,stock)));
         try {
             response= HttpStockService.getService().getStockInfoAsJSON(req);
         } catch (IOException e) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE,null,e);
         }
-        return response;
+        if(cache.getSocks(req.url()).equals("none") ){
+            cache.addStocks(req.url(),response);
+            return response;
+        }
+        return cache.getSocks(req.url());
     }
     private static String iexapis(Request req, Response res) {
         String response ="None";
         try {
-            response= HttpStockService.getService().getStockInfoAsJSONiex(req);
+            response= HttpStockService.getServiceCloud().getStockInfoAsJSONiex(req);
         } catch (IOException e) {
             Logger.getLogger(App.class.getName()).log(Level.SEVERE,null,e);
         }
-        return response;
+        if(cache.getCloud(req.url()).equals("none") ){
+            cache.addCloud(req.url(),response);
+            return response;
+        }
+        return cache.getCloud(req.url());
     }
 
     /**private static String inputDataPage(Request req, Response res) {

@@ -13,34 +13,33 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public abstract class HttpStockService {
-    private  static Cache cache = new Cache();
-    private static  final HttpStockService _instance = createService();
 
+    private static  final HttpStockService _instance = createService();
+    private static  final HttpStockService _instanceIex = createServiceCloud();
     private static final String USER_AGENT = "Mozilla/5.0";
 
     public static HttpStockService getService(){
         return  _instance;
     }
-
+    public static HttpStockService getServiceCloud(){
+        return  _instanceIex;
+    }
+    public static HttpStockService createServiceCloud(){
+        return new IEXCloudHttpStockService() ;
+    }
     public static HttpStockService createService(){
         return new AlphaAdvantageHttpStockService();
     }
 
     public  String getStockInfoAsJSON(Request req) throws IOException {
 
-        StockEnum time = StockEnum.valueOf(req.queryParams("time"));
+        String time = req.queryParams("time");
         String stock = req.queryParams("stock");
         String responseStr = "None";
-        String responseCache= String.valueOf(cache.getSocks(getURL(time,stock)));
-        URL obj ;
-        if(!responseCache.equals( "none")){
-            obj = new URL(String.valueOf(cache.getSocks(getURL(time,stock))));
 
-        }
-        else{
-            obj = new URL(getURL(time,stock));
-            cache.addStocks(String.valueOf(obj),getURL(time,stock));
-        }
+        URL obj = new URL(getURL(time,stock));
+
+
 
 
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -75,20 +74,10 @@ public abstract class HttpStockService {
 
     public  String getStockInfoAsJSONiex(Request req) throws IOException {
 
-        StockEnum time = StockEnum.valueOf("INTRADAY");
+        String time = req.queryParams("time");
         String stock = req.queryParams("stock");
         String responseStr = "None";
-        String responseCache= String.valueOf(cache.getCloud(getURL(time,stock)));
-        URL obj ;
-        //URL obj = new URL(getURL(time,stock));
-        if(!responseCache.equals( "none")){
-            obj = new URL(String.valueOf(cache.getCloud(getURL(time,stock))));
-
-        }
-        else{
-            obj = new URL(getURL(time,stock));
-            cache.addCloud(String.valueOf(obj),getURL(time,stock));
-        }
+        URL obj = new URL(getURL(time,stock));
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", USER_AGENT);
@@ -118,6 +107,7 @@ public abstract class HttpStockService {
         System.out.println("GET DONE");
         return responseStr;
     }
-    abstract public String getURL(StockEnum time,String stock);
+
+    abstract public String getURL(String time,String stock);
 }
 

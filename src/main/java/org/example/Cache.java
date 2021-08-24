@@ -13,7 +13,7 @@ public class Cache {
     }
 
 
-    public String getSocks(String name) throws IOException {
+    public String getSocks(String name) {
 
         if(stocks.containsKey(name)) {
 
@@ -26,7 +26,7 @@ public class Cache {
     }
 
 
-    public String getCloud(String name) throws IOException {
+    public String getCloud(String name)  {
         if(Cloud.containsKey(name)) {
             return Cloud.get(name);
         }
