@@ -78,7 +78,17 @@ public abstract class HttpStockService {
         StockEnum time = StockEnum.valueOf("INTRADAY");
         String stock = req.queryParams("stock");
         String responseStr = "None";
-        URL obj = new URL(getURL(time,stock));
+        String responseCache= String.valueOf(cache.getCloud(getURL(time,stock)));
+        URL obj ;
+        //URL obj = new URL(getURL(time,stock));
+        if(!responseCache.equals( "none")){
+            obj = new URL(String.valueOf(cache.getCloud(getURL(time,stock))));
+
+        }
+        else{
+            obj = new URL(getURL(time,stock));
+            cache.addCloud(String.valueOf(obj),getURL(time,stock));
+        }
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", USER_AGENT);
